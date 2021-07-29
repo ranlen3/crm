@@ -8,6 +8,7 @@ import com.rl.crm.utils.DateTimeUtil;
 import com.rl.crm.utils.SqlSessionUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserServiceImpl implements UserService {
@@ -44,5 +45,10 @@ public class UserServiceImpl implements UserService {
             throw new LoginException("ip地址受限");
         }
         return user;
+    }
+
+    public List<User> getUserList() {
+        List<User> uList = userDao.getUserList();
+        return uList;
     }
 }

@@ -43,10 +43,8 @@ public class UserController extends HttpServlet {
 
         //事务层开发,统一用代理类形态的接口对象
         UserService us = (UserService) ServiceFactory.getService(new UserServiceImpl());
-
         try {
             User user = us.login(loginAct,loginPwd,ip);
-
             request.getSession().setAttribute("user",user);
             //执行到此，表示登录成功
             PrintJson.printJsonFlag(response,true);
