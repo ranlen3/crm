@@ -87,7 +87,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     if (data.success){
                         //添加成功后
                         //刷新市场活动信息列表（局部刷新）
-                        pageList(1,2);
+                        //pageList(1,2);
+						/*
+						$("#activityPage").bs_pagination('getOption', 'currentPage')
+						修改后停留当前页
+
+						$("#activityPage").bs_pagination('getOption', 'rowsPerPage')
+						维持修改后每页展现的记录条数
+
+						 */
+						//添加完后，应该回到第一页，维持修改后每页展现的记录条数
+						pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 
                         //清空添加操作中的数据
                         /*
@@ -168,7 +178,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						dataType : "json",
 						success : function (data) {
 							if (data.success){
-								pageList(1,2);
+								//pageList(1,2);
+								pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 							}else {
 								alert("删除市场活动失败")
 							}
@@ -218,7 +229,47 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 })
             }
         })
+        //为更新按钮绑定事件，执行市场活动的修改操作
+        $("#updateBtn").click(function () {
+            $.ajax({
+                url : "workbench/activity/update.do",
+                data : {
+                    "id":$.trim($("#edit-id").val()),
+                    "owner":$.trim($("#edit-owner").val()),
+                    "name":$.trim($("#edit-name").val()),
+                    "startDate":$.trim($("#edit-startDate").val()),
+                    "endDate":$.trim($("#edit-endDate").val()),
+                    "cost":$.trim($("#edit-cost").val()),
+                    "description":$.trim($("#edit-description").val())
+                },
+                type : "post",
+                dataType : "json",
+                success : function (data) {
 
+                    if (data.success){
+                        //修改成功后
+                        //刷新市场活动信息列表（局部刷新）
+                         //pageList(1,2);
+						/*
+						$("#activityPage").bs_pagination('getOption', 'currentPage')
+						修改后停留当前页
+
+						$("#activityPage").bs_pagination('getOption', 'rowsPerPage')
+						维持修改后每页展现的记录条数
+
+						 */
+						//添加完后，停留当前页，维持修改后每页展现的记录条数
+						pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+								,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
+						$("#editActivityModal").modal("hide");
+
+                    }else {
+                        alert("修改市场活动失败")
+                    }
+                }
+            })
+        })
 	});
 	function pageList(pageNo,pageSize) {
 		$("#qx").prop("checked",false);
@@ -419,7 +470,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="updateBtn">更新</button>6
+					<button type="button" class="btn btn-primary" id="updateBtn">更新</button>
 				</div>
 			</div>
 		</div>
@@ -513,7 +564,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </tr>
                     <tr class="active">
                         <td><input type="checkbox" /></td>
-                        <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
+                        <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.jsp';">发传单</a></td>
                         <td>zhangsan</td>
                         <td>2020-10-10</td>
                         <td>2020-10-20</td>
